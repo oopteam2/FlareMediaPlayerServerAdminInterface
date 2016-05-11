@@ -14,48 +14,54 @@
         <title>Admin Validation</title>
     </head>
     <body>
-        <%   
-            FlareMediaPlayerServer mediaplayer = new FlareMediaPlayerServer ();
-            boolean isServerRunning = mediaplayer.isServerRunning(6661);
+        <%
+            FlareMediaPlayerServer mediaplayer = new FlareMediaPlayerServer();
+            boolean isServerRunning = mediaplayer.isServerRunning(10500);
             // 0 = running, 1 = Incorrect password, 2 = stopped
-            int status=0; 
-            
-            if (request.getParameter("run") != null) // start server button
-            {
-                if (!isServerRunning)
+            int status = 1;
+            String admin = request.getParameter("admin");
+            String password = request.getParameter("password");
+            if (FlareMediaServerAuthentificator.serverAuthentification(admin, password)) {
+                if (request.getParameter("run") != null) // start server button
                 {
-                   // try to run server
-                   mediaplayer.runFlareMediaPlayerServer(request.getParameter("admin"), 
-                                                  request.getParameter("password"));
-                   isServerRunning  = mediaplayer.isServerRunning(6661);
-                   if (isServerRunning) status = 0; // running
+                    if (!isServerRunning) {
+                        // run server
+                        mediaplayer.runFlareMediaPlayerServer(admin,
+                                password);
+
+                        isServerRunning = mediaplayer.isServerRunning(10500);
+                        if (isServerRunning) {
+                            status = 0; // running
+                        }
+                    }
+                    else 
+                    {
+                        
+                        status = 0;
+                    }
+
+                    
+                } else if (request.getParameter("stop") != null) // stop server button
+                {
+                    // stop server
+                    mediaplayer.stopServer(10500);
+                    status = 2; // running
+
                 }
-                
-                if (mediaplayer.getAuthStatus() == false)
-                {
-                   // Server Password was incorrect
-                   // stop server until a correct password is given
-                   mediaplayer.stopServer(6661);
-                   status=1; // incorrect password
-                   out.println("Server stopped: Incorrect Password");
-                } 
             }
-            
-            else // stop server button
+            else
             {
-                // stop server
-                mediaplayer.stopServer(6661);
-                status = 2; // running
-                
+                // Server Password was incorrect
+                status = 1; // incorrect password
+                        
             }
             // redirect to login page
-            if (status > 0)
-            {
-                String site = new String("index.jsp?status=" + status);
-                response.setStatus(response.SC_MOVED_TEMPORARILY);
-                response.setHeader("Location", site); 
-            }
             
-         %>
+            String site = new String("index.jsp?status=" + status);
+            response.setStatus(response.SC_MOVED_TEMPORARILY);
+            response.setHeader("Location", site);
+            
+
+        %>
     </body>
 </html>

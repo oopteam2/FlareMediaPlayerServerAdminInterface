@@ -19,7 +19,7 @@
         <% 
             FlareMediaPlayerServer mediaplayer = new FlareMediaPlayerServer ();
             // check if the server is already running
-            boolean isServerRunning = mediaplayer.isServerRunning(6661);
+            boolean isServerRunning = mediaplayer.isServerRunning(10500);
         %>
         <h1><center> FlareMediaPlayerServer Admin Site </center></h1>
         <form method="post" action="adminAuth.jsp">
