@@ -16,7 +16,7 @@
     <body>
         <%
             FlareMediaPlayerServer mediaplayer = new FlareMediaPlayerServer();
-            boolean isServerRunning = mediaplayer.isServerRunning(10500);
+            boolean isServerRunning = mediaplayer.isServerRunning(8000);
             // 0 = running, 1 = Incorrect password, 2 = stopped
             int status = 1;
             String admin = request.getParameter("admin");
@@ -29,7 +29,7 @@
                         mediaplayer.runFlareMediaPlayerServer(admin,
                                 password);
 
-                        isServerRunning = mediaplayer.isServerRunning(10500);
+                        isServerRunning = mediaplayer.isServerRunning(8000);
                         if (isServerRunning) {
                             status = 0; // running
                         }
@@ -44,7 +44,7 @@
                 } else if (request.getParameter("stop") != null) // stop server button
                 {
                     // stop server
-                    mediaplayer.stopServer(10500);
+                    mediaplayer.stopServer(8000);
                     status = 2; // running
 
                 }
